@@ -91,8 +91,8 @@ describeEach.todo([[1]])('todo: %d', value => {});
 
 ## Contributions
 
-Like us? [Star](https://github.com/testduet/describe-each/stargazers) us.
+Like this? [Star](https://github.com/testduet/describe-each/stargazers) the repo.
 
-Want to make it better? [File](https://github.com/testduet/describe-each/issues) us an issue.
+Want to make it better? [File](https://github.com/testduet/describe-each/issues) an issue.
 
 Don't like something you see? [Submit](https://github.com/testduet/describe-each/pulls) a pull request.
