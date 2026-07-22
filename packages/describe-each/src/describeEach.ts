@@ -1,26 +1,57 @@
-// import { describe } from 'node:test';
-// import { format } from 'node:util';
+/// <reference types="node" />
 
-// function describe_(describe, rows) {
-//   return (
-//     /** @type {string} */
-//     message,
-//     fn
-//   ) => {
-//     for (const row of rows) {
-//       const countFormatting = message.replaceAll('%%', '').split('%').length - 1;
+import { describe } from 'node:test';
+import { format } from 'node:util';
 
-//       describe(format(message, ...row.slice(0, countFormatting)), () => fn(...row));
-//     }
-//   };
-// }
+type DescribeCallback = (...args: ReadonlyArray<unknown>) => void;
+type DescribeFunction = (name: string, fn: () => void) => unknown;
+type DescribeTodoFunction = (name: string) => unknown;
 
-// function describeEach(rows) {
-//   return describe_(describe, rows);
-// }
+// Adapted from Jest's `each` array-table overloads.
+interface Each {
+  <T extends Record<string, unknown>>(table: ReadonlyArray<T>): (name: string, fn: (arg: T) => void) => void;
+  <T extends readonly [unknown, ...Array<unknown>]>(
+    table: ReadonlyArray<T>
+  ): (name: string, fn: (...args: [...T]) => void) => void;
+  <T extends ReadonlyArray<unknown>>(table: ReadonlyArray<T>): (name: string, fn: (...args: T) => void) => void;
+  <T>(table: ReadonlyArray<T>): (name: string, fn: (arg: T) => void) => void;
+}
 
-// describeEach.only = function only(rows) {
-//   return describe_(describe.only, rows);
-// };
+interface DescribeEach extends Each {
+  only: Each;
+  skip: Each;
+  todo: Each;
+}
 
-// export default describeEach;
+function describe_(describeFn: DescribeFunction, rows: ReadonlyArray<unknown>) {
+  return (message: string, fn: DescribeCallback) => {
+    for (const row of rows) {
+      const args = Array.isArray(row) ? row : [row];
+      const countFormatting = message.replaceAll('%%', '').split('%').length - 1;
+
+      describeFn(format(message, ...args.slice(0, countFormatting)), () => fn(...args));
+    }
+  };
+}
+
+function describeTodo_(todoFn: DescribeTodoFunction, rows: ReadonlyArray<unknown>) {
+  return (message: string, _fn: DescribeCallback) => {
+    for (const row of rows) {
+      const args = Array.isArray(row) ? row : [row];
+      const countFormatting = message.replaceAll('%%', '').split('%').length - 1;
+
+      todoFn(format(message, ...args.slice(0, countFormatting)));
+    }
+  };
+}
+
+const describeEach: DescribeEach = Object.assign(
+  ((rows: ReadonlyArray<unknown>) => describe_(describe, rows)) as Each,
+  {
+    only: ((rows: ReadonlyArray<unknown>) => describe_(describe.only, rows)) as Each,
+    skip: ((rows: ReadonlyArray<unknown>) => describe_(describe.skip, rows)) as Each,
+    todo: ((rows: ReadonlyArray<unknown>) => describeTodo_(describe.todo as DescribeTodoFunction, rows)) as Each
+  }
+);
+
+export default describeEach;

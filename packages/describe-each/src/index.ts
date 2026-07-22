@@ -1,2 +1,1 @@
-// export { default as describeEach } from './describeEach.ts';
-export {};
+export { default as describeEach } from './describeEach.ts';

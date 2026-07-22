@@ -6,6 +6,7 @@ const baseConfig: Options = {
   entry: {
     index: './src/index.ts'
   },
+  removeNodeProtocol: false,
   sourcemap: true
 };
 
