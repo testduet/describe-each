@@ -5,6 +5,7 @@ import { format } from 'node:util';
 
 type DescribeCallback = (...args: ReadonlyArray<unknown>) => void;
 type DescribeFunction = (name: string, fn: () => void) => unknown;
+type DescribeTodoFunction = (name: string) => unknown;
 
 // Adapted from Jest's `each` array-table overloads.
 interface Each {
@@ -33,12 +34,23 @@ function describe_(describeFn: DescribeFunction, rows: ReadonlyArray<unknown>) {
   };
 }
 
+function describeTodo_(todoFn: DescribeTodoFunction, rows: ReadonlyArray<unknown>) {
+  return (message: string, _fn: DescribeCallback) => {
+    for (const row of rows) {
+      const args = Array.isArray(row) ? row : [row];
+      const countFormatting = message.replaceAll('%%', '').split('%').length - 1;
+
+      todoFn(format(message, ...args.slice(0, countFormatting)));
+    }
+  };
+}
+
 const describeEach: DescribeEach = Object.assign(
   ((rows: ReadonlyArray<unknown>) => describe_(describe, rows)) as Each,
   {
     only: ((rows: ReadonlyArray<unknown>) => describe_(describe.only, rows)) as Each,
     skip: ((rows: ReadonlyArray<unknown>) => describe_(describe.skip, rows)) as Each,
-    todo: ((rows: ReadonlyArray<unknown>) => describe_(describe.todo, rows)) as Each
+    todo: ((rows: ReadonlyArray<unknown>) => describeTodo_(describe.todo as DescribeTodoFunction, rows)) as Each
   }
 );
 

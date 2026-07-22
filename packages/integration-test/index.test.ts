@@ -1,6 +1,6 @@
 import { describeEach } from '@testduet/describe-each';
 import assert from 'node:assert/strict';
-import { before, describe, test } from 'node:test';
+import { after, before, describe, test } from 'node:test';
 
 describe('describeEach with array rows', () => {
   let values: number[];
@@ -15,7 +15,7 @@ describe('describeEach with array rows', () => {
     });
   });
 
-  test('calls each value', () => {
+  after(() => {
     assert.deepEqual(values, [1, 2, 3]);
   });
 });

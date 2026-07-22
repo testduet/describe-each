@@ -15,7 +15,7 @@ describe('describeEach with array rows', () => {
     });
   });
 
-  test('calls each value', () => {
+  after(() => {
     assert.deepEqual(values, [1, 2, 3]);
   });
 });
@@ -33,7 +33,7 @@ describe('describeEach with scalar rows', () => {
     });
   });
 
-  test('calls each value', () => {
+  after(() => {
     assert.deepEqual(values, [1, 2, 3]);
   });
 });
@@ -85,16 +85,19 @@ describe('describeEach.skip', () => {
 });
 
 describe('describeEach.todo', () => {
+  let callbackCalled: boolean;
   let callCount: number;
   let restore: () => void;
 
   before(() => {
-    const todo = mock.method(describe, 'todo', (_name: string, fn: () => void) => fn());
+    const todo = mock.method(describe, 'todo', (_name: string) => {});
 
     restore = () => todo.mock.restore();
 
-    describeEach.todo([[1]])('todo: %d', value => {
-      assert.equal(value, 1);
+    callbackCalled = false;
+
+    describeEach.todo([[1]])('todo: %d', () => {
+      callbackCalled = true;
     });
 
     callCount = todo.mock.callCount();
@@ -102,6 +105,7 @@ describe('describeEach.todo', () => {
 
   test('should have called describe.todo() once', () => {
     assert.equal(callCount, 1);
+    assert.equal(callbackCalled, false);
   });
 
   after(() => restore());
