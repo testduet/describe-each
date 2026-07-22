@@ -38,12 +38,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/compulim/describe-each.git"
+    "url": "https://github.com/testduet/describe-each.git"
   },
   "bugs": {
-    "url": "https://github.com/compulim/describe-each/issues"
+    "url": "https://github.com/testduet/describe-each/issues"
   },
-  "homepage": "https://github.com/compulim/describe-each#readme",
+  "homepage": "https://github.com/testduet/describe-each#readme",
   "localPeerDependencies": {
     "@testduet/common": "0.0.0-0",
     "@testduet/test-harness": "0.0.0-0"
