@@ -46,6 +46,6 @@
     "@happy-dom/global-registrator": "^20.11.0",
     "escape-string-regexp": "^5.0.0",
     "expect": "^30.4.1",
-    "typescript": "^7.0.2"
+    "typescript": "^6.0.3"
   }
 }
