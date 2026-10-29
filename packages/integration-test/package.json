@@ -34,7 +34,7 @@
   },
   "author": "William Wong (https://github.com/compulim)",
   "devDependencies": {
-    "@happy-dom/global-registrator": "^20.11.0",
+    "@happy-dom/global-registrator": "^21.0.4",
     "@testduet/common": "^0.0.0-0",
     "@tsconfig/strictest": "^2.0.8",
     "expect": "^30.4.1",
