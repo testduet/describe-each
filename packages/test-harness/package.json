@@ -43,7 +43,7 @@
   "license": "MIT",
   "pinDependencies": {},
   "dependencies": {
-    "@happy-dom/global-registrator": "^20.11.0",
+    "@happy-dom/global-registrator": "^21.0.4",
     "escape-string-regexp": "^5.0.0",
     "expect": "^30.4.1",
     "typescript": "^6.0.3"
